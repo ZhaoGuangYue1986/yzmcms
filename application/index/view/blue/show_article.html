@@ -1,0 +1,133 @@
+ {m:include "index","header"}
+  <!--/超小屏幕可见-->
+  <div class="content-wrap"><!--内容-->
+    <div class="content">
+      <header class="news_header">
+        <h2>{$title}</h2>
+        <ul>
+		 <li>当前位置：{get_location($catid)}</li>
+          <li>{$nickname}  发布于 {date('Y-m-d H:i:s',$updatetime)} </li>
+          <li>来源：{$copyfrom} </li>
+          <li>共 <strong>{$click}</strong> 人围观 </li>
+          <li></li>
+        </ul>
+      </header>
+      <article class="news_content">
+        {$content}
+      </article>
+      <div class="reprint">转载请说明出处：<a href="{$url}" title="{$title}">{$title}</a></div>
+	  <!--此处按钮可以用作收藏，也可以当作下载按钮使用，请自行调用，如果不会联系QQ743395324
+      <div class="zambia"><a href="javascript:;" name="zambia" rel=""><span class="glyphicon glyphicon-thumbs-up"></span> 赞（0）</a></div>
+	  -->
+      <div class="tags news_tags">标签： <span data-toggle="tooltip" data-placement="bottom" title="查看关于 本站 的文章">{m:centent_tag modelid="$modelid" id="$id" limit="10"}
+			{if empty($data)}无标签{/if}  <!-- 这句话是判断有没有内容标签的，可以选择删除 -->
+			{loop $data $v}
+				<a href="{U('search/index/tag',array('id'=>$v['id']))}" target="_blank">{$v[tag]}</a>
+			{/loop}</span> </div>
+      <nav class="page-nav"> <span class="page-nav-prev">上一篇<br />
+        <a href="" rel="prev">{$pre}</a></span> <span class="page-nav-next">下一篇<br />
+        <a href="" rel="next">{$next}</a></span> </nav>
+      <div class="content-block related-content visible-lg visible-md">
+        <h2 class="title"><strong>相关推荐</strong></h2>
+        <ul>
+         {m:hits field="title,url,status,thumb,description" catid="$catid" limit="4"}
+			{loop $data $v}
+          <li><a href="{$url}"><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}/qidian/blue/images/nopic.jpg{/if}">
+            <h3> {$title}</h3>
+            </a></li>
+			 {/loop}
+        </ul>
+      </div>
+	   <div class="content-block related-content visible-lg visible-md">
+        <h2 class="title"><strong>谈天说地</strong></h2>
+		</div>
+    <!-- 评论区 开始 -->
+		
+			<div class="comment">
+				<div class="com_form">
+				<form action="{U('comment/index/init')}" method="post"  onsubmit="return check_comm(this)">
+				<input type="hidden" name="modelid" value="{$modelid}">
+				<input type="hidden" name="catid" value="{$catid}">
+				<input type="hidden" name="id" value="{$id}">
+				<input type="hidden" name="title" value="{$title}">
+				<input type="hidden" name="url" value="{$url}">
+				<textarea class="textarea" id="content" name="content" placeholder="我来说两句~"></textarea>
+				<p><input type="submit" class="sub_btn" name="dosubmit" value="提交"><span class="emotion">表情</span></p>
+				</form>
+				</div>
+			</div>
+			<div class="comment_list">
+				{m:comment_list modelid="$modelid" catid="$catid" id="$id" limit="20"}
+				<div class="comment_list_top">共{count($data)}条评论</div>
+				<div class="comment_list_body">
+				<ul>
+					{loop $data $v}
+					<li>
+						<a class="user_pic" href="{U('member/myhome/init', array('userid'=>$v['userid']))}" target="blank"><img src="{if !empty($v['userpic'])}{$v[userpic]}{else}{STATIC_URL}images/default.gif{/if}" height="35" width="35"></a>
+						<div class="comm_right">
+							<a class="user_name" href="{U('member/myhome/init', array('userid'=>$v['userid']))}" target="blank">{$v[username]}</a>
+							<p>{nl2br($v['content'])}</p>
+							<p><span class="comm_time">{date('Y-m-d H:i:s',$v['inputtime'])}</span> <a href="javascript:toreply('{$v[id]}');" class="comm_a">回复</a></p>
+							<div id="rep_{$v[id]}" class="none">
+							<form action="{U('comment/index/init')}" method="post"  onsubmit="return check_rep(this)">
+							<input type="hidden" name="modelid" value="{$modelid}">
+							<input type="hidden" name="catid" value="{$catid}">
+							<input type="hidden" name="id" value="{$id}">
+							<input type="hidden" name="title" value="{$title}">
+							<input type="hidden" name="url" value="{$url}">
+							<input type="hidden" name="reply" value="{$v[id]}">
+							<input type="hidden" name="reply_to" value="{$v[username]}">
+							<textarea name="content" class="textarea textarea2" placeholder="我来说两句~"></textarea>
+							<input type="submit" class="sub_btn static" name="dosubmit" value="提交">
+							</form>
+							</div>
+						</div>
+					</li>
+					{/loop}
+					{if empty($data)}<li>这篇文章还没有收到评论，赶紧来抢沙发吧~</li>{/if}
+				</ul>
+				</div>
+			</div> 			
+			<!-- 评论区 结束 -->
+    </div>
+  </div>
+  <!--/内容-->
+  <aside class="sidebar visible-lg"><!--右侧>992px显示-->
+    <div class="sentence"> <strong>每日一句</strong>
+      <h2><?php echo date("Y-m-d");?></h2>
+      <p>你是我人生中唯一的主角，我却只能是你故事中的一晃而过得路人甲。</p>
+    </div>
+    <div id="search" class="sidebar-block search" role="search">
+      <h2 class="title"><strong>搜索</strong></h2>
+      <form class="navbar-form" action="{SITE_URL}index.php" method="get">
+        <div class="input-group">
+		<input type="hidden" name="m" value="search">
+		<input type="hidden" name="modelid" value="1" id="modelid">
+          <input type="text" class="form-control" name="q" size="35" placeholder="请输入关键字">
+          <span class="input-group-btn">
+          <button class="btn btn-default btn-search" type="submit">搜索</button>
+          </span> </div>
+      </form>
+    </div>
+    <div class="sidebar-block recommend">
+      <h2 class="title"><strong>热门推荐</strong></h2>
+      <ul>
+                {m:hits field="title,url,status,click,thumb,description" catid="$catid" limit="5"}
+			{loop $data $v}
+        <li><a href="{$v[url]}"> <span class="thumb"><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}/qidian/blue/images/nopic.jpg{/if}" alt="{$v[title]}"></span> <span class="text">{$v[title]}</span> <span class="text-muted">阅读({$v[click]})</span></a></li>
+		 {/loop}	
+      </ul>
+    </div>
+    <div class="sidebar-block comment">
+      <h2 class="title"><strong>最新评论</strong></h2>
+      <ul>
+       {m:comment_newest limit="5"}
+	   {loop $data $v}	
+        <li data-toggle="tooltip" data-placement="top" title="{$v[title]} "><a href="{$v[url]}"><span class="face"><img src="/qidian/blue/images/icon/icon.png" alt=""></span> <span class="text"><strong>  {if $v['userid']}{$v[username]}{else}网友评论{/if} </strong> ( {$v[title]} ) 说：<br />
+        {$v[content]}</span></a></li>
+		  {/loop} 
+      </ul>
+    </div>
+  </aside>
+  <!--/右侧>992px显示-->
+ {m:include "index","footer"} 

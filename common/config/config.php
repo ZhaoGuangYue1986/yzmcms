@@ -2,7 +2,7 @@
 return array(
 
     //系统配置
-    'site_theme' => 'default',    //站点默认主题目录
+    'site_theme' => 'eric',    //站点默认主题目录
     'url_html_suffix'    => '.html',      //URL伪静态后缀
     'set_pathinfo'       => false,         //Nginx默认不支持PATHINFO模式，需配置此项为true，则Nginx可支持PATHINFO，系统默认为false
     
@@ -10,8 +10,8 @@ return array(
     'db_type' => 'pdo',     	  // 数据库链接扩展 , 支持 pdo | mysqli | mysql
     'db_host' => '127.0.0.1',  // 服务器地址
     'db_name' => 'yzmcms',		// 数据库名
-    'db_user' => 'root',       // 用户名
-    'db_pwd' => '',       		// 密码
+    'db_user' => 'yzmcms',       // 用户名
+    'db_pwd' => 'yzmcms',       		// 密码
     'db_port' => 3306,         // 端口
     'db_prefix' => 'yzm_',        // 数据库表前缀
     

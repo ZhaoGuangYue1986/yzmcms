@@ -2,7 +2,7 @@
 return array(
 
     //系统配置
-    'site_theme' => 'eric',    //站点默认主题目录
+    'site_theme' => 'blue',    //站点默认主题目录
     'url_html_suffix'    => '.html',      //URL伪静态后缀
     'set_pathinfo'       => false,         //Nginx默认不支持PATHINFO模式，需配置此项为true，则Nginx可支持PATHINFO，系统默认为false
     

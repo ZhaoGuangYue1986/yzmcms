@@ -1,0 +1,103 @@
+<div class="footerGrid">
+     <div class="topWrapper">
+        <div class="menuWrap">
+            <div class="menuBox">
+                <a href="{$site[site_url]}">首页</a>
+                {m:nav field="catid,catname,arrchildid,pclink" where="parentid=0" limit="20"}
+                {loop $data $v}
+                <a href="{$v[pclink]}">{$v[catname]}</a>
+                {/loop}
+                <a href="https://bbs.yzmcms.com" target="_blank">社区</a>
+            </div>
+            <!--<div class="copyright">骄傲的使用了轻量级开源管理系统<a target="_blank" href="http://www.yzmcms.com/" class="alink">YzmCMS</a></div>-->
+            <div class="copyright">相信有一天, 理想主义 终将所向披靡.</div>
+        </div>
+     </div>
+     <div class="midWrapper">
+         <div class="article">
+             <p>站点声明：本站转载作品版权归原作者及来源网站所有，原创内容作品版权归作者所有，任何内容转载、商业用途等均须联系原作者并注明来源。</p>
+             <p></p>
+             <p><span>{$site[site_copyright]}  · Powered By <a target="_blank" href="http://www.yzmcms.com/">YzmCMS</a></span>{$site[site_filing]} {$site[site_code]}<br>相关侵权、举报、投诉及建议等，请发E-mail：tonney@duoguyu.com</p>
+             <p>友情链接：
+    			 {m:link field="url,logo,name" where="status=1" order="listorder ASC" limit="20"}
+    			 {loop $data $v}<a style="padding-right:20px; color:#555;" href="{$v[url]}" target="_blank">{$v[name]}</a>
+    			 {/loop}
+		     </p>
+         </div>
+     </div>
+</div>
+
+<!--widget-->
+<div class="fixedWidget" id="RbWidget">
+    <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=tonney@duoguyu.com" target="_blank" class="mail" title="联系我们"></a>
+    <a href="javascript:;" class="top backTop" title="返回顶部"></a>
+</div>
+<script>
+    var scrollTop = function(){
+    	var offset = 300,
+    		offset_opacity = 1200,
+    		scroll_top_duration = 700,
+    		$back_to_top = $('.backTop');
+    	$(window).scroll(function(){
+    		( $(this).scrollTop() > offset ) ? $back_to_top.addClass('backTopVisible') : $back_to_top.removeClass('backTopVisible cd-fade-out');
+    		if( $(this).scrollTop() > offset_opacity ) { 
+    			$back_to_top.addClass('cd-fade-out');
+    		}
+    	});
+    	$back_to_top.on('click', function(event){
+    		event.preventDefault();
+    		$('body,html').animate({
+    			scrollTop: 0 ,
+    		 	}, scroll_top_duration
+    		);
+    	});
+    };
+    $(function(){
+        scrollTop();
+    });
+    // let browser = '<div class="lowBrowserGroup"><div class="lowBrowserGroup"></div></div>';
+</script>
+
+<!--[if lt IE 9]>
+<div class="lowBrowserGroup">
+    <div class="lowBrowserWrapper">
+        <div class="title">
+            哎呀，您的浏览器版本太低了，我们推荐使用以下浏览器！
+        </div>
+        <div class="browserWrap">
+            <div class="item">
+                <a href="https://www.google.cn/chrome/">
+                    <div class="img chrome"></div>
+                    <div class="detail">chrome</div>
+                </a>
+            </div>
+            <div class="item">
+                <a href="http://www.firefox.com.cn/">
+                    <div class="img firefox"></div>
+                    <div class="detail">firefox</div>
+                </a>
+            </div>
+            <div class="item">
+                <a href="https://browser.360.cn/">
+                    <div class="img i360"></div>
+                    <div class="detail">360</div>
+                </a>
+            </div>
+            <div class="item">
+                <a href="https://browser.qq.com/?adtag=duoguyu">
+                    <div class="img qq"></div>
+                    <div class="detail">qq</div>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="title">
+            当然，您也可以直接扫描下方二维码，打开小程序进行访问！
+        </div>
+        <div class="wechatImg">
+            {adver(4)}
+        </div>
+        
+    </div>
+</div>
+<![endif]-->

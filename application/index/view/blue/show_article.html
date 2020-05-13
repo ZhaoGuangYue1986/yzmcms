@@ -114,7 +114,7 @@
       <ul>
                 {m:hits field="title,url,status,click,thumb,description" catid="$catid" limit="5"}
 			{loop $data $v}
-        <li><a href="{$v[url]}"> <span class="thumb"><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}/qidian/blue/images/nopic.jpg{/if}" alt="{$v[title]}"></span> <span class="text">{$v[title]}</span> <span class="text-muted">阅读({$v[click]})</span></a></li>
+        <li><a href="{$v[url]}"> <span class="thumb"><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}/qidian/blue/images/nopic.jpg{/if}"></span> <span class="text">{$v[title]}</span> <span class="text-muted">阅读({$v[click]})</span></a></li>
 		 {/loop}	
       </ul>
     </div>

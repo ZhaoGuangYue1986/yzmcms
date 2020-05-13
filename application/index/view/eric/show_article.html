@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <title>{$seo_title}</title>
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <link href="{STATIC_URL}eric/css/dgy.base.css" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.nav.css?v=2020041302" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.grid.css?v=2020041301" rel="stylesheet" type="text/css" />
+        <link href="//at.alicdn.com/t/font_958938_n3j31its8x.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{STATIC_URL}eric/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}plugin/layer/layer.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}eric/plugin/layui/layui.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}eric/js/detailMotheds.js?v=2020033007"></script>
+    </head>
+    <body>
+    	<!-- 封面 start -->
+        {if $thumb}
+        <div class="whiteNav" id="navGrid">
+            {m:include "index","header"}
+        </div>
+    	<div class="fullPitchGroup" id="fullPitch" style="background:url({$thumb}) no-repeat center; background-size:cover; margin-top:-80px; margin-bottom:-80px;">
+            <div class="overlay"></div>
+            <div class="textGrid">
+                <div class="textBox">
+                    <p>{get_catname($catid)}</p>
+    		 	    <h1>{$title}</h1>
+                    <div class="moreInfo">
+                        文 / <span class="mr10">{$nickname}</span>
+                        来源 / <span class="mr10">{$copyfrom}</span>
+                        阅读 / <span class="mr10">{$click}</span>
+                        <span class="mr10">{format_time($inputtime)}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {else}
+        {m:include "index","header"}
+        {/if}
+    	<!-- 封面 end -->
+    	<div class="container mt100">
+    	    <div class="articleMode">
+    	        <div class="leftGrid">
+    	            <div class="articleDetail">
+                        {if !$thumb}
+                    	<div class="textWrapper">
+                            <p class="mb0">{get_catname($catid)}</p>
+                     	    <h1>{$title}</h1>
+                            <div class="moreInfo">
+                                文 / <span class="mr10">{$nickname}</span>
+                                来源 / <span class="mr10">{$copyfrom}</span>
+                                阅读 / <span class="mr10">{$click}</span>
+                                <span class="mr10">{format_time($inputtime)}</span>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="detail">
+    		 	    	    {$content}
+                        </div>
+                        
+                        <!-- 标签 -->
+        	            <div class="tagWrapper">
+        	                <div class="">
+        		 	    	{m:centent_tag modelid="$modelid" id="$id" limit="10"}
+        		 	    	{loop $data $v}
+        		 	    		<a href="{tag_url($v['id'])}" class="tag" target="_blank">{$v[tag]}</a>
+        		 	    	{/loop}
+        	                </div>
+        		 	    	<a href="javascript:;" class="favoriteBtn" onclick="add_favorite('{$title}');" id="favorite">收藏</a>
+        	            </div>
+        	            
+    	            </div>
+    	            <!-- 评论区域 start -->
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>评论</b></h3>
+                    </div>
+            		<div class="commentGrid">
+            			<div class="commentForm">
+                			<form action="{U('comment/index/init')}" method="post" onsubmit="return check_comm(this)">
+                    			<input type="hidden" name="modelid" value="{$modelid}">
+                    			<input type="hidden" name="catid" value="{$catid}">
+                    			<input type="hidden" name="id" value="{$id}">
+                    			<input type="hidden" name="title" value="{$title}">
+                    			<input type="hidden" name="url" value="{$url}">
+                    			<textarea class="commentTextarea" id="content" name="content" placeholder="我来说两句~"></textarea>
+        				        <div class="btnBox"><input type="submit" class="submitBtn" name="dosubmit" value="提交"></div>
+                			</form>
+            			</div>
+            			
+            		    <!-- 评论列表 -->
+                		<div class="commentList">
+                			{m:comment_list modelid="$modelid" catid="$catid" id="$id" limit="20"}
+                			<div class="title">共{count($data)}条评论</div>
+                			<div class="commentGrid">
+                    			<ul class="itemUl">
+                    				{loop $data $v}
+                    				<li class="item">
+                    				    <a href="{U('member/myhome/init', array('userid'=>$v['userid']))}" target="blank">
+                                            <img class="avatar" src="{get_memberavatar($v['userid'])}" alt="{$v[username]}" />
+                                        </a>
+                						<div class="username">
+                						    <a href="{U('member/myhome/init', array('userid'=>$v['userid']))}" target="blank">{$v[username]}</a>
+                						    <span>{format_time($v['inputtime'])}</span>
+                						</div>
+                						<div class="commentGroup">
+                						    <p>{nl2br($v['content'])}</p>
+                						</div>
+                    				</li>
+                    				{/loop}
+                    				{if empty($data)}<li class="tips">这篇文章还没有收到评论，赶紧来抢沙发吧~</li>{/if}
+                    			</ul>
+                			</div>
+                		</div>
+                		
+            		</div>
+    	            <!-- 评论区域 end -->
+    	        </div>
+    	        
+    	        <!-- 右侧区域 -->
+    	        <div class="rightGrid">
+                    
+                    <!-- **** AD START **** -->
+                    <div class="widgetWrapper">
+                        <div class="adBox">
+                            <!--
+                                此处调用 广告内容
+                                设置路径：
+                                    模块管理 -> 广告管理 -> 添加广告
+                                调用说明：
+                                    调用方式：参见后台系统中 广告管理说明
+                            -->
+                            <a href="https://www.duoguyu.com/" target="_blank" title="扫码体验小程序"><img src="https://www.duoguyu.com/dist/images/wechat-miniapp.jpg"></a>
+                        </div>
+                    </div>
+                    <!-- **** AD END **** -->
+                    <div class="widgetWrapper mb20">
+                        <div class="titleWrapper">
+                            <h3 class="title"><b>推荐</b></h3>
+                        </div>
+                        <div class="layoutWrapper">
+                            <!-- 
+                                此处调用 推荐 可自行修改调用的flag
+                                设置路径：内容管理 -> 内容属性 flag=4
+                                内容属性：
+                                    1,置顶; 2,头条; 3,特荐; 4,推荐; 5,热点; 6,幻灯; 7,跳转;
+                                当前属性：
+                                    4,推荐
+                            -->
+        					{m:lists field="title,url,catid,thumb,inputtime" modelid="1" order="id DESC" flag="4" limit="6"}
+                		    {loop $data $k=>$v}
+                            {if $k < 1}
+                            <div class="fullBox">
+                                <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                                    <img class="bannerImg" src="{get_thumb($v['thumb'])}" alt="{$v[title]}" />
+                                    <h4 class="title">{str_cut($v['title'], 140)}</h4>
+                                    <p>{get_catname($v['catid'])} · {format_time($v['inputtime'])}</p>
+                                </a>
+                            </div>
+                            {else}
+                            <div class="fullBox item">
+                                <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                                    <img class="banner" src="{get_thumb($v['thumb'])}" alt="{$v[title]}" />
+                                    <h4 class="title">{str_cut($v['title'], 140)}</h4>
+                                    <p>{get_catname($v['catid'])} · {format_time($v['inputtime'])}</p>
+                                </a>
+                            </div>
+                            {/if}
+        					{/loop}
+                        </div>
+                    </div>
+                    
+    	        </div>
+    	        <div class="clearfix"></div>
+    	    </div>
+    	</div>
+    
+    	<!-- 底部 -->
+    	{m:include "index","footer"}
+        <script>
+    		function add_favorite(title) {
+    			$.ajax({
+    				type: 'POST',
+    				url: '{U("api/index/favorite")}', 
+    				data: 'title='+title+'&url='+location.href,
+    				dataType: "json", 
+    				success: function (msg) {
+    					if(msg.status == 1){
+    						$("#favorite").html('已收藏');
+    					}else{
+	                        layer.msg('哎呀，你好像忘记登录了？');
+    					}
+    				}
+    			});
+    		}
+            layui.use('code', function(){
+                layui.code();
+                layui.code({
+                  elem: 'pre',
+                  encode: true,
+                  title: '#示例代码',
+                  about: false
+                });
+            });
+        </script>
+	
+    </body>
+</html>

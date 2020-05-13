@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <title>{$seo_title}</title>
+        <link href="{STATIC_URL}eric/css/dgy.base.css?v=2020040701" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.nav.css?v=2020040707" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.grid.css?v=2020040705" rel="stylesheet" type="text/css" />
+	    <link rel="stylesheet" type="text/css" href="{STATIC_URL}plugin/swiper/css/swiper.min.css" />
+        <link href="//at.alicdn.com/t/font_958938_n3j31its8x.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{STATIC_URL}eric/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}js/yzm-front.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}plugin/swiper/js/swiper.min.js"></script>
+    </head>
+    <body>
+        {m:include "index","header"}
+        
+        <div class="container mt70">
+            
+            <!-- flex布局列表 -->
+            <div class="flexBetweenMode">
+                
+                <!-- 左侧 -->
+                <div class="flexWrapper bgf6 pt20">
+                    
+                    <div class="articleMode listTitle">
+                    	<div class="textWrapper">
+    	 		            {m:lists catid="$catid" page="page"}
+                    	    <p>{php echo $tag->total;}篇更新</p>
+                     	    <h1># {get_catname($catid)}</h1>
+                            <div class="moreInfo">{$subtitle}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 搜索框 -->
+                    <!-- searchWrapper -->
+                    <div class="widgetWrapper bgNone">
+                        <div class="searchWrapper extend category mb20">
+                            <div class="searchBox">
+                                <form method="get" action="{U('search/index/init')}" target="_blank" onsubmit="return checkSearch()">
+                                    <div class="searchtxt">
+                                        <input type="hidden" name="modelid" value="1" />
+                                        <input name="q" type="text" placeholder="请输入关键词进行搜索。" id="searchInput" class="searchInput"/>
+                                    </div>
+                                    <button class="searchBtn" type="submit"><i class="iconfont icondgy icon-iconset0456"></i></button>
+                                </form>
+                            </div>
+                            <!-- 标签组 -->
+                            <div class="tagBox">
+                                <!-- 
+                                    此处调用tag标签 
+                                    设置路径：内容管理 -> TAG管理 -> 添加TAG
+                                -->
+                                {m:tag field="id,tag,total" order="RAND()" limit="6"}
+                                {if $data}
+                                {loop $data $v}
+                                <a href="{tag_url($v['id'])}" class="tag" target="_blank">{$v[tag]}</a>
+                                {/loop}
+                                {else}
+                                <span>标签演示，后台添加tag标签后，显示tag标签</span>
+                                {/if}
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                        	function checkSearch(){
+                        	    var searchInput = $('#searchInput').val();
+                        	    var searchVal = $.trim(searchInput);
+                        	    if(searchVal == ''){
+                        			layer.msg("哎呀，你好像忘记输入搜索内容了！");
+                        			return false;
+                        	    }
+                        	    if(searchVal.length < 2){
+                        			layer.msg("搜索关键字至少需要2个字哟！");
+                        			return false;
+                        	    }
+                        		return true;
+                        	}
+                        </script>
+                        
+                        <div class="mb20">
+                            <div class="titleWrapper">
+                                <h3 class="title"><b>排行</b></h3>
+                            </div>
+                            <ul class="articleBox mb20">
+    		 			        {m:hits field="title,url,color,catid,inputtime,thumb" catid="$catid" limit="4"}
+                    		    {loop $data $k=>$v}
+                                <li>
+                                    <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                                    {if $k < 1}
+                                    <div class="widgetWrapper p0 mb10">
+                                        <img class="adImg" src="{get_thumb($v['thumb'])}" alt="{$v[title]}" />
+                                    </div>
+                                    {/if}
+                                    <h4>{str_cut($v['title'], 140)}</h4>
+                                    <p>{get_catname($v['catid'])} · {format_time($v['inputtime'])}</p>
+                                    </a>
+                                </li>
+            					{/loop}
+                            </ul>
+                        </div>
+                        
+                        <div class="mb20">
+                            <div class="adBox">
+                                <!--
+                                    此处调用 广告内容
+                                    设置路径：
+                                        模块管理 -> 广告管理 -> 添加广告
+                                    调用说明：
+                                        调用方式：参见后台系统中 广告管理说明
+                                -->
+                                <a href="https://www.duoguyu.com/" target="_blank" title="演示广告，可删除或在后台设置广告"><img src="https://www.duoguyu.com/dist/images/ad-demo-2.jpg"></a>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    
+                </div>
+                
+                <div class="flexWrapper max pt30">
+                    
+                    <!-- 频道banner -->
+                    <div class="launchBannerGrid category mb40">
+                        
+                        <!-- banner -->
+                        <div class="bannerGroup">
+                            <div class="swiper-container" id="indexFocus">
+                                <div class="bannerGroup swiper-wrapper">
+                                    <!-- 
+                                        此处仅为功能演示，主题模版安装调试完毕后，可删除当前演示内容！！！
+                                        演示功能：轮播图（可删除） START
+                                    -->
+                                    <a class="item swiper-slide" href="{$v[url]}" target="_blank">
+    				      		        <img class="img" src="https://www.duoguyu.com/dist/images/banner-yzmcms.jpg" alt="骄傲的使用了轻量级开源管理程序YzmCMS" title="骄傲的使用了轻量级开源管理程序YzmCMS" />
+                                    </a>
+                                    <a class="item swiper-slide" href="{$v[url]}" target="_blank">
+    				      		        <img class="img" src="https://www.duoguyu.com/dist/images/banner-eric.jpg" alt="多骨鱼Eric模版主题" title="多骨鱼Eric模版主题" />
+                                    </a>
+                                    <!-- 演示功能：轮播图（可删除） END -->
+                                    <!--
+                                        此处调用 轮播图 - 轮播分类typeid=2的内容（默认无轮播分类，可新增轮播分类或在调用时移除该分类）
+                                        设置路径：模块管理 -> 轮播图管理 -> 添加轮播图
+                                        建议尺寸：880x300
+                                    -->
+                                    {m:banner field="title,image,url,typeid,status" typeid="2" limit="5"}
+                                    {loop $data $v}
+                                    <a class="item swiper-slide" href="{$v[url]}" target="_blank">
+			      		                <img class="img" src="{$v[image]}" alt="{$v[title]}" title="{$v[title]}" />
+                                    </a>
+                                    {/loop}
+                                </div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 频道banner end -->
+            
+            
+                    {php $data = get_childcat($catid);}
+                    {loop $data $v}
+                    <div class="imgTextGrid">
+                        <div class="titleWrapper">
+                            <h3 class="title"><b>{$v[catname]}</b></h3>
+			                <a href="{$v[pclink]}" class="more">更多></a>
+                        </div>
+                        <ul>
+                        	{m:lists field="title,thumb,url,color,inputtime,description,catid,id,click" catid="$v['catid']" limit="6"}
+                        	{loop $data $v}
+                        	<li>
+        	                    <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+        	                        <div class="tophead mb10">
+                                        {php $aid = $v['id'];}
+             							{m:get sql="SELECT id,tag FROM yzmcms_tag_content AS a LEFT JOIN yzmcms_tag AS b ON a.tagid=b.id WHERE aid=$aid" limit="1" return="tag_data"}
+             							{loop $tag_data $val}	
+                 						<span class="tag">{$val[tag]}</span>
+             							{/loop}
+        	                            <img class="focus" src="{get_thumb($v['thumb'])}" alt="{$v[title]}">
+        	                        </div>
+        	                        <h2>{str_cut($v['title'], 140)}</h2>
+        	                        <div class="article">
+        	                            <p>{str_cut($v['description'], 110)}</p>
+        	                        </div>
+    	                            <div class="info">
+    	                                <span>浏览 / {$v[click]}</span>
+    	                                <span>阅读更多</span>
+    	                            </div>
+        	                    </a>
+        	                </li>
+        					{/loop}
+                    	</ul>
+                    </div>
+        			{/loop}
+    		        
+                </div>
+                
+            </div>
+            
+            
+            
+					
+        </div>
+        
+		<!-- 底部 -->
+	    {m:include "index","footer"}
+	    
+    </body>
+</html>

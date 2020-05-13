@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <title>{$seo_title}</title>
+        <link href="{STATIC_URL}eric/css/dgy.base.css" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.nav.css?v=2020040707" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.grid.css?v=2020040232" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="{STATIC_URL}eric/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}js/yzm-front.js"></script>
+    </head>
+    <body>
+        {m:include "index","header"}
+	     
+        <div class="container mt100">
+            
+            <!-- 推广焦点区 -->
+            <div class="fixedListWrapper">
+                <div class="articleMode listTitle">
+                	<div class="textWrapper">
+	 		            {m:lists catid="$catid" page="page"}
+                	    <p>{php echo $tag->total;}篇更新</p>
+                 	    <h1># {get_catname($catid)}</h1>
+                        <div class="moreInfo">{$subtitle}</div>
+                    </div>
+                </div>
+                
+                <!-- **** AD START **** -->
+                <div class="widgetWrapper">
+                    <div class="adBox shadow">
+                        <!--
+                            此处调用 广告内容
+                            设置路径：
+                                模块管理 -> 广告管理 -> 添加广告
+                            调用说明：
+                                调用方式：参见后台系统中 广告管理说明
+                        -->
+                        <a href="https://www.duoguyu.com/" target="_blank" title="演示广告，可删除或在后台设置广告"><img src="https://www.duoguyu.com/dist/images/ad-wechat.jpg"></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- flex布局列表 -->
+            <div class="flexBetweenMode">
+                <div class="flexWrapper"></div>
+                <div class="flexWrapper mid pt20">
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>最新</b></h3>
+                    </div>
+                    
+                    <!-- 最新内容 -->
+		 		    {m:lists field="id,title,url,inputtime,color,thumb,description,click,flag" catid="$catid" limit="10" page="page"}
+        		    {loop $data $v}
+                    <div class="richTextItem list">
+                        <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                        {if !empty($v['thumb'])}
+                            <h4 class="title">{str_cut($v['title'], 140)}</h4>
+                            <div class="article">
+                                <img class="focus" src="{get_thumb($v['thumb'])}" alt="{$v[title]}" />
+                                <div class="textBox">
+                                    <p class="mb15">{str_cut($v['description'], 190)}</p>
+                                    <p>
+                                        {format_time($v['inputtime'])} · 
+            		 					{php $aid = $v['id'];}
+             							{m:get sql="SELECT id,tag FROM yzmcms_tag_content AS a LEFT JOIN yzmcms_tag AS b ON a.tagid=b.id WHERE aid=$aid" limit="3" return="tag_data"}
+             							{loop $tag_data $val}	
+             							<a href="{tag_url($val['id'])}" class="tag" target="_blank" >{$val[tag]}</a>
+             							{/loop}
+             						</p>
+                                </div>
+                            </div>
+                        {else}
+                            <h4 class="title">{str_cut($v['title'], 140)}</h4>
+                            <div class="article detail">
+                                <p class="mb15">{str_cut($v['description'], 190)}</p>
+                                <p>
+                                    {format_time($v['inputtime'])} · 
+        		 					{php $aid = $v['id'];}
+         							{m:get sql="SELECT id,tag FROM yzmcms_tag_content AS a LEFT JOIN yzmcms_tag AS b ON a.tagid=b.id WHERE aid=$aid" limit="3" return="tag_data"}
+         							{loop $tag_data $val}	
+         							<a href="{tag_url($val['id'])}" class="tag" target="_blank" >{$val[tag]}</a>
+         							{/loop}
+         						</p>
+                            </div>
+                        {/if}
+                        </a>
+                    </div>
+    		        {/loop}
+				    <div id="pageGroup">{$pages}</div>
+                </div>
+                
+                <div class="flexWrapper">
+                    <div class="widgetWrapper mb20">
+                        <div class="titleWrapper">
+                            <h3 class="title"><b>排行</b></h3>
+                        </div>
+                        <ul class="articleBox mb20">
+		 			        {m:hits field="title,url,color,catid,inputtime,thumb" catid="$catid" limit="4"}
+                		    {loop $data $k=>$v}
+                            <li>
+                                <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                                {if $k < 1}
+                                <div class="widgetWrapper p0 mb10">
+                                    <img class="adImg" src="{get_thumb($v['thumb'])}" alt="{$v[title]}" />
+                                </div>
+                                {/if}
+                                <h4>{str_cut($v['title'], 140)}</h4>
+                                <p>{get_catname($v['catid'])} · {format_time($v['inputtime'])}</p>
+                                </a>
+                            </li>
+        					{/loop}
+                        </ul>
+                        <div class="widgetWrapper p0">
+                            <div class="adBox">
+                                <!--
+                                    此处调用 广告内容
+                                    设置路径：
+                                        模块管理 -> 广告管理 -> 添加广告
+                                    调用说明：
+                                        调用方式：参见后台系统中 广告管理说明
+                                -->
+                                <a href="https://www.duoguyu.com/" target="_blank" title="演示广告，可删除或在后台设置广告"><img src="https://www.duoguyu.com/dist/images/ad-demo-2.jpg"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- **** 普通文章列表 END **** -->
+                    
+                </div>
+                
+            </div>
+        </div>
+		
+		<!-- 底部 -->
+	    {m:include "index","footer"}
+	    
+    </body>
+</html>

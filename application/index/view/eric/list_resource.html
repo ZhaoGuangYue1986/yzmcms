@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <title>{$seo_title}</title>
+        <link href="{STATIC_URL}eric/css/dgy.base.css" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.nav.css?v=2020040707" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.grid.css?v=2020040604" rel="stylesheet" type="text/css" />
+        <link href="//at.alicdn.com/t/font_958938_n3j31its8x.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{STATIC_URL}eric/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}js/yzm-front.js"></script>
+    </head>
+    <body>
+        {m:include "index","header"}
+	     
+        <div class="container mt70">
+            
+            
+            <!-- flex布局列表 -->
+            <div class="flexBetweenMode">
+                
+                <!-- 左侧 -->
+                <div class="flexWrapper bgf6 pt20">
+                    <div class="articleMode listTitle">
+                    	<div class="textWrapper">
+    	 		            {m:lists catid="$catid" page="page"}
+                    	    <p>{php echo $tag->total;}篇更新</p>
+                     	    <h1># {get_catname($catid)}</h1>
+                            <div class="moreInfo">{$subtitle}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 搜索框 -->
+                    <!-- searchWrapper -->
+                    <div class="widgetWrapper bgNone">
+                        
+                        <div class="searchWrapper extend category mb20">
+                            <div class="searchBox">
+                                <form method="get" action="{U('search/index/init')}" target="_blank" onsubmit="return checkSearch()">
+                                    <div class="searchtxt">
+                                        <input type="hidden" name="modelid" value="1" />
+                                        <input name="q" type="text" placeholder="请输入关键词进行搜索。" id="searchInput" class="searchInput"/>
+                                    </div>
+                                    <button class="searchBtn" type="submit"><i class="iconfont icondgy icon-iconset0456"></i></button>
+                                </form>
+                            </div>
+                            <!-- 标签组 -->
+                            <div class="tagBox">
+                                {m:tag field="id,tag,total" order="RAND()" limit="6"}
+                                {loop $data $v}
+                                <a href="{tag_url($v['id'])}" class="tag" target="_blank">{$v[tag]}</a>
+                                {/loop}
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                        	function checkSearch(){
+                        	    var searchInput = $('#searchInput').val();
+                        	    var searchVal = $.trim(searchInput);
+                        	    if(searchVal == ''){
+                        			layer.msg("哎呀，你好像忘记输入搜索内容了！");
+                        			return false;
+                        	    }
+                        	    if(searchVal.length < 2){
+                        			layer.msg("搜索关键字至少需要2个字哟！");
+                        			return false;
+                        	    }
+                        		return true;
+                        	}
+                        </script>
+                        
+                        <div class="mb20">
+                            <div class="adBox">
+                                {adver(1)}
+                            </div>
+                        </div>
+                        
+                        <div class="mb20">
+                            <div class="titleWrapper">
+                                <h3 class="title"><b>排行</b></h3>
+                            </div>
+                            <ul class="articleBox mb20">
+    		 			        {m:hits field="title,url,color,catid,updatetime,thumb" modelid="1" thumb="1" limit="4"}
+                    		    {loop $data $k=>$v}
+                                <li>
+                                    <a href="{$v[url]}" title="{$v[title]}" target="_blank">
+                                    <h4>{str_cut($v['title'], 140)}</h4>
+                                    <p>{get_catname($v['catid'])} · {format_time($v['updatetime'])}</p>
+                                    </a>
+                                </li>
+            					{/loop}
+                            </ul>
+                        </div>
+                    
+                    </div>
+                    
+                    
+                </div>
+                
+                <div class="flexWrapper max pt20">
+                    
+                    <div class="articleModeGrid on w3">
+                        {m:lists field="title,inputtime,url,click,thumb" catid="$catid" limit="9" page="page"}
+                        {loop $data $v}
+                        <div class="itemLi layoutAuto">
+                            <a href="{$v[url]}" target="_blank" class="content">
+                                <div class="imgBox full">
+                                    <img class="img" src="{$v[thumb]}" alt="{$v[title]}">
+                                </div>
+                                <div class="articleGroup">
+                                    <h2>{str_cut($v['title'], 120)}</h2>
+                                    <div class="btmInfo">
+                                        <span class="strong">LOAD MORE</span>
+                                        <span class="text">{format_time($v['inputtime'])} / 浏览 {$v[click]}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {/loop}
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="pageGroup">{$pages}</div>
+    		        
+                </div>
+                
+            </div>
+            
+    
+        </div>
+		
+		<!-- 底部 -->
+	    {m:include "index","footer"}
+	    
+    </body>
+</html>

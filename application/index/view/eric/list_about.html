@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="no-js">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>{$seo_title}</title>
+        <meta name="keywords" content="{$keywords}" />
+        <meta name="description" content="{$description}" />
+        <link href="{STATIC_URL}eric/css/dgy.base.css?v=2020033002" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.nav.css?v=2020040707" rel="stylesheet" type="text/css" />
+        <link href="{STATIC_URL}eric/css/dgy.grid.css?v=2020040307" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="{STATIC_URL}eric/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="{STATIC_URL}plugin/layer/layer.js"></script>
+    </head>
+    <body>
+    {m:include "index","header"}
+    
+    <!-- baseGroup -->
+    <div class="container mt100">
+        
+        <div class="flexBetweenMode">
+            
+            <div class="flexWrapper max">
+                <div class="widgetWrapper">
+                    <!-- 友联 -->
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>友链</b></h3>
+                    </div>
+                    <div class="newArticleGrid link mb40">
+                        {m:link field="url,logo,name,msg" where="status=1" order="listorder ASC" limit="10"}
+                        {loop $data $v}
+                        <div class="itemLi">
+                            <a href="{$v[url]}" target="_blank" class="content">
+                                <div class="img" style="background:url('{$v[logo]}') no-repeat; background-size:cover;"></div>
+                                <h2>{str_cut($v['name'], 75)}</h2>
+                                <p>{$v[msg]}</p>
+                            </a>
+                        </div>
+                        {/loop}
+                        <div class="clearfix"></div>
+                    </div>
+                    
+                    <!-- 留言信息 -->
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>留言</b></h3>
+                    </div>
+                    <div class="guestBookGroup mb40">
+                        <form action="{U('guestbook/index/init')}" method="post" name="guest" onsubmit="return check()">
+                            <div class="inputLabel" style="display:none">
+                                <input name="title" type="hidden" class="inputBlock" value="留言标题" placeholder="留言标题" />
+                            </div>
+                            <div class="inputLabel">
+                                <input name="name" type="text" class="inputBlock" placeholder="昵称" />
+                            </div>
+                            <div class="inputLabel" style="display:none">
+                                <input name="email" type="email" class="inputBlock" placeholder="Email(选填)" />
+                            </div>
+                            <div class="inputLabel">
+                                <textarea name="bookmsg" cols="50" rows="6" class="textareaBlock" placeholder="留言内容" ></textarea>
+                            </div>
+                            <div class="" style="">
+                                <div class="inputLabel qrcode" style="width:660px; float:left;">
+                                    <input name="code" type="text" class="inputBlock" placeholder="验证码" ><img class="qrcode" src="{U('api/index/code')}" onclick="this.src=this.src+'?'" title="看不清？点击更换">
+                                </div>
+                                <input style="width:180px; float:right;" type="submit" name="dosubmit" value="提交留言" class="submitBtn"/>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- 留言列表 -->
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>最新留言</b></h3>
+                    </div>
+                    
+                    <div class="commentWrapper">
+                        <ul class="itemUl">
+                            {m:guestbook page="page" limit="5"}
+                            {loop $data $v}
+                            <li class="item">
+                                <div class="username"># {$v[name]} <span>{format_time($v['booktime'])}</span></div>
+                                <div class="commentGroup">
+                                    <p class="detailText">{$v['bookmsg']}</p>
+                                </div>
+                                {loop $v['admin_reply'] $v}
+                                <div class="otherInfo"><strong style="color:#409eff">{$site[site_name]}</strong>：{$v[bookmsg]}</div>
+                                {/loop}
+                            </li>
+                            {/loop}
+                            {if empty($data)}<li class="tips">暂无留言，赶紧来抢沙发吧~</li>{/if}
+                        </ul>
+                        <div id="pageGroup">{$pages}</div>
+                    </div>
+                    
+                
+                    <!-- 更新日志 开始 -->
+                    <div class="titleWrapper">
+                        <h3 class="title"><b>更新日志</b></h3>
+                    </div>
+                    <div class="detailGroup">
+                        <ul class="updateGroup">
+                            <li>
+                                <p class="title"><span class="cfBlue mr10">Version 5.5.0 Beta</span><small>2020/04/10</small></p>
+                                <p>当前主题: <b>Eric</b> v1.0 Beta。</p>
+                                <p><b>Add:</b></p>
+                                <p class="pl20">1: 升级全新模版主题“<b>Eric</b>”，轻爽极简风格；</p>
+                                <p class="pl20">2: “<b>互联网+</b>、<b>小酒馆</b>”栏目重新回归并合并至“片刻”频道下；</p>
+                                <p class="pl20">3: 新增“<b>会员中心</b>”投稿功能等。</p>
+                                <p><b>Update:</b></p>
+                                <p class="pl20">1: 调整了“<b>首页、频道、子栏目</b>”的界面UI布局，优化了视觉效果;</p>
+                                <p class="pl20">2: 优化了“<b>详情信息</b>”界面，提升了沉寂式阅读体验，以及提供了相对广阔的阅读视野；</p>
+                                <p class="pl20">3: 优化了UI小细节等；</p>
+                                <p><b>Remove:</b></p>
+                                <p class="pl20">移除了“<b>响应式</b>”布局，同时提供了“<b>微信小程序</b>”功能，可供移动端进行适配访问。</p>
+                            </li>
+                            <li>
+                                <p class="title"><span class="cfBlue mr10">Version 5.3.6</span><small>2019/06/12</small></p>
+                                <p>当前主题: <b>Avatar</b> v1.2.2。</p>
+                                <p><b>Add:</b></p>
+                                <p class="pl20">首页增加“最新留言”板块，展示最近3条留言信息。</p>
+                                <p><b>Update:</b></p>
+                                <p class="pl20">1: 将首页“推荐资源”栏目，修改为滑动视觉效果; 优化首页友联UI等</p>
+                                <p class="pl20">2: 调整“关于我”界面栏目，修复一处留言分页的前端bug;</p>
+                                <p class="pl20">3: 优化其它小细节等；</p>
+                                <p class="pl20">4: 升级至响应式（2019/06/21 Update.）。</p>
+                                <p class="tipsInfo">tips: <a href="https://www.duoguyu.com/resource/30.html" target="_blank" title="Avatar响应式博客模版主题-尝鲜版，免费下载"><b>Avatar</b> 响应式博客模版主题-尝鲜版</a> 已提供免费下载。</p>
+                            </li>
+                            <li>
+                                <p class="title"><span class="cfBlue mr10">Version 1.0.2</span><small>2017/08/25</small></p>
+                                <p>多骨鱼完成建站并部署上线，采用的是YzmCMS 3.0版本后台管理系统。</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 更新日志 结束 -->
+                    
+                </div>
+                
+            </div>
+            
+            <!-- 右侧 -->
+            <div class="flexWrapper">
+                <div class="widgetWrapper mb20 p0">
+                    <div class="myInfoGrid mb20">
+                        <div class="titleWrapper">
+                            <h3 class="title"><b>关于</b></h3>
+                        </div>
+                        <i class="avatar"></i>
+                        <div class="itemTitle">
+                            <p>hey, I am</p><h6>tonney</h6>
+                        </div>
+                        <div class="itemTitle">
+                            <p>邮箱：</p><h6><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=tonney@duoguyu.com" target="_blank">tonney@duoguyu.com</a></h6>
+                        </div>
+                        <div class="itemTitle">
+                            <p>博客：</p><h6>https://www.duoguyu.com</h6>
+                        </div>
+                        <div class="detail">
+                            <p>我是一个设计爱好者、斜杠青年、伪文青，同时也是一位前端攻(ban)城(zhuan)狮(de)。</p>
+                            <p>目前在帝都的一家互联网公司供职。平时不忙时，喜欢偶发性改改UI、写写一些稀奇古怪的界面，然后发布一些围绕YzmCMS的 <a href="https://www.duoguyu.com/resource/" target="_blank" title="模版主题资源下载">模版主题</a>。</p>
+                            <p>如你所见，这是我的个人博客自留地。后台采用了 <a href="http://blog.yzmcms.com" target="_blank" title="袁志蒙个人博客">袁志蒙</a> 自主开发的优秀轻量级后台管理程序 <a href="http://www.yzmcms.com" target="_blank" title="YzmCMS官网">YzmCMS</a> - v5.2版本，前端界面则由我独自设计与开发，当前博客模板主题为：<b>Avatar</b> v1.2.2 Beta。</p>
+                            <p>当前了，毕竟我只是一位设计爱好者，在审美设计上也有许多的缺陷和不足。如果你有一些好的想法、创意或者寻求帮助的话，可以发邮件给我(<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=tonney@duoguyu.com" target="_blank">tonney@duoguyu.com</a>) 或者 到<a href="http://bbs.yzmcms.com" target="_blank" title="YzmCMS论坛">YzmCMS社区</a>逛逛。</p>
+                            <p>最后，祝自由快乐!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 特别鸣谢 开始 -->
+                    <div class="widgetWrapper p0">
+                        <div class="titleWrapper">
+                            <h3 class="title"><b>特别鸣谢</b></h3>
+                        </div>
+                        <div class="thankGroup">
+                            <p><a href="http://www.yzmcms.com" target="_blank" title="YzmCMS官网">YzmCMS</a> 轻量级开源管理系统，提供后台系统支持。</p>
+                            <p><a href="http://blog.yzmcms.com" target="_blank" title="袁志蒙博客">袁志蒙</a> 友情提供后端技术支持。</p>
+                        </div>
+                    </div>
+                    <!-- 特别鸣谢 结束 -->
+                
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- footer -->
+    {m:include "index","footer"}
+    
+    <script type="text/javascript">
+        function check(){
+            if(document.guest.title.value==""){
+                layer.msg("留言主题不能为空！");
+                return false;
+            }
+            if(document.guest.name.value==""){
+                layer.msg("请填写您的昵称！");
+                return false;
+            }
+            if(document.guest.bookmsg.value==""){
+                layer.msg("请填写留言内容！");
+                return false;
+            }
+            if(document.guest.code.value==""){
+                layer.msg("请填写验证码！");
+                return false;
+            }       
+            return true;
+        }
+    </script>
+    
+    </body>
+</html>

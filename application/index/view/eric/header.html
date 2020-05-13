@@ -1,0 +1,44 @@
+<!-- 头部导航 -->
+<div class="navGrid fixed">
+    <div class="navGroup">
+        <div class="leftWrap">
+            <a href="{SITE_URL}">
+                <img src="{$site[site_logo]}" class="logo" title="{$site[site_name]}" alt="{$site[site_name]}">
+            </a>
+        </div>
+        <div class="navUl">
+            <a class="item" href="{SITE_URL}">首页</a>
+            {m:nav field="catid,catname,arrchildid,pclink,type" where="parentid=0" limit="10"}
+            {loop $data $v}
+            <a {if isset($catid) && $v['catid']==$catid} class="item on" {else} class="item" {/if} href="{$v[pclink]}" {if $v['type']==2} target="_blank" {/if}>{$v[catname]}</a>
+            {/loop}
+            <a class="item" href="https://bbs.yzmcms.com" target="_blank">社区</a>
+            {if intval(get_cookie('_userid'))==0}
+            <a href="{U('member/index/login')}" rel="nofollow" target="_blank" class="item">登录/注册</a>
+            {else}
+    	    <span class="itemLogin">
+                <img src="{get_memberavatar(get_cookie('_userid'))}" class="avatarImg">
+                <div class="loginGroup">
+                    <div class="box">
+                        <a href="{U('member/index/init')}" title="个人中心" target="_blank">
+                        <img src="{get_memberavatar(get_cookie('_userid'))}" class="avatar">
+                        </a>
+                        <div class="itemLi">
+                            <a href="{U('member/index/init')}" class="userName" title="个人中心" target="_blank">个人中心</a>
+                        </div>
+                        <div class="itemLi">
+                            <a href="{U('member/member_content/favorite')}" class="userName" title="我的收藏" target="_blank">我的收藏</a>
+                        </div>
+                        <div class="itemLi">
+                            <a href="{U('member/member_content/init')}" class="userName edit" title="发布创作" target="_blank">发布创作</a>
+                        </div>
+                        <div class="itemLi exit">
+                            <a href="{U('member/index/logout')}">安全退出</a>
+                        </div>
+                    </div>
+                </div>
+    		</span>
+            {/if}
+        </div>
+    </div>
+</div>
